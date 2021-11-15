@@ -1,5 +1,6 @@
 package TD3_PF.commandes;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -51,38 +52,69 @@ public class DAO {
      * ensemble des différents produits commandés
      */
     public Set<Produit> produits() {
-        return commandes.stream()
+        Set<Produit> res = new HashSet<>();
+        for(Commande c: commandes){
+            for (Paire<Produit,Integer> p:c.lignes()){
+                res.add(p.fst());
+            }
+        }
+        return res;
+        /*return commandes.stream()
                 .flatMap(c -> c.lignes().stream())
                 .map(Paire::fst)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet());*/
     }
 
     /**
      * liste des commandes vérifiant un prédicat
      */
     public List<Commande> selectionCommande(Predicate<Commande> p) {
-        return commandes.stream()
+        List<Commande> res = new ArrayList<>();
+        for(Commande c:commandes){
+            if(p.test(c)){
+                res.add(c);
+            }
+        }
+        return res;
+        /*return commandes.stream()
             .filter(p)
-            .collect(Collectors.toList());
+            .collect(Collectors.toList());*/
     }
 
     /**
      * liste des commandes dont au moins une ligne vérifie un prédicat
      */
     public List<Commande> selectionCommandeSurExistanceLigne(Predicate<Paire<Produit,Integer>> p) {
-        return commandes.stream()
+        List<Commande> res = new ArrayList<>();
+        for(Commande c: commandes){
+            for(Paire<Produit,Integer> ligne : c.lignes()){
+                if(p.test(ligne)){
+                    res.add(c);
+                    break;
+                }
+            }
+        }
+        return res;
+        /*return commandes.stream()
             .filter(c -> c.lignes().stream().anyMatch(p))
-            .collect(Collectors.toList());
+            .collect(Collectors.toList());*/
     }
 
     /**
      * ensemble des différents produits commandés vérifiant un prédicat
      */
     public Set<Produit> selectionProduits(Predicate<Produit> p) {
-        return produits()
+        Set<Produit> res=new HashSet<>();
+        for(Produit pro:produits()){
+            if (p.test(pro)){
+                res.add(pro);
+            }
+        }
+        return res;
+        /*return produits()
             .stream()
             .filter(p)
-            .collect(Collectors.toSet());
+            .collect(Collectors.toSet());*/
     }
 
 }
