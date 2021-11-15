@@ -54,12 +54,15 @@ public class Commande {
         return commandeNormalisee;
     }
 
+    public <T,U>Map<T,List<U>> regrouper(List<Paire<T,U>> lignes){
+        //lignes.stream().collect(Collectors::groupingBy())
+        return null;
+    }
+
     public Double cout(Function<Paire<Produit, Integer>, Double> calculLigne) {
-        double rtr = 0;
-        for (Paire<Produit, Integer> l : normaliser().lignes) {
-            rtr += calculLigne.apply(l);
-        }
-        return rtr;
+        return lignes.stream()
+                .map(l -> calculLigne.apply(l))
+                .reduce(0.0,Double::sum);
     }
 
     public String affiche(Function<Paire<Produit, Integer>, Double> calculLigne) {
