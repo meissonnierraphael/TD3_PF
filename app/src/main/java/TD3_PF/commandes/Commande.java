@@ -55,8 +55,10 @@ public class Commande {
     }
 
     public <T,U>Map<T,List<U>> regrouper(List<Paire<T,U>> lignes){
-        //lignes.stream().collect(Collectors::groupingBy())
-        return null;
+        Map<T, List<U>> res = new HashMap<>();
+        lignes.forEach(p ->
+                res.computeIfAbsent(p.fst(), k -> new ArrayList<>()).add(p.snd()));
+        return res;
     }
 
     public Double cout(Function<Paire<Produit, Integer>, Double> calculLigne) {
