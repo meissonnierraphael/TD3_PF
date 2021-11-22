@@ -221,6 +221,19 @@ public class App {
                     .map(p -> new Paire<>(e.notes().get(p.fst()),p.snd()))
                     .collect(Collectors.toList());
 
+    // obtention de la liste de (note, coef) pour les matières d'un étudiant
+    // 1. obtenir les (matière, coef)s
+    // 2. mapper pour obtenir les (note, coef)s, 0.0 pour la note si l'étudiant est
+    // DEF dans cette matière
+    public static final Function<Etudiant, List<Paire<Double, Integer>>> notesPondereesIndicatives =
+            e -> matieresCoefE.apply(e)
+                    .map(p -> new Paire<>(e.notes().containsKey(p.fst()) ? e.notes().get(p.fst()) : 0.0 , p.snd()))
+                    .collect(Collectors.toList());
+
+    // rempli avec l'accumulateur spécifique
+    public static final Function<List<Paire<Double, Integer>>, Paire<Double, Integer>> reduit =
+            as -> as.stream().reduce(zero,accumulateurMoyenne);
+
     public static void main(final String[] args) {
         exercice2();
         exercice3();
