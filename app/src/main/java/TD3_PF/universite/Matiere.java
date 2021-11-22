@@ -1,5 +1,8 @@
 package TD3_PF.universite;
 
+import java.util.function.Function;
+import java.util.stream.Stream;
+
 public class Matiere {
     private String nom;
 

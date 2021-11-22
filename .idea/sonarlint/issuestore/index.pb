@@ -1,6 +1,4 @@
 
-Q
-!app/src/main/java/TD3_PF/App.java,e\d\ede6c3c60ba90767391ac7913c843e2110c3a579
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 a
