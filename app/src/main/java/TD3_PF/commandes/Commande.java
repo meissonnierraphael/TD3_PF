@@ -37,20 +37,9 @@ public class Commande {
      * cumule les lignes en fonction des produits
      */
     public Commande normaliser() {
-        Map<Produit, Integer> lignesCumulees = new HashMap<>();
-        for (Paire<Produit, Integer> ligne : lignes) {
-            Produit p = ligne.fst();
-            int qte = ligne.snd();
-            if (lignesCumulees.containsKey(ligne.fst())) {
-                lignesCumulees.put(p, lignesCumulees.get(p) + qte);
-            } else {
-                lignesCumulees.put(p, qte);
-            }
-        }
         Commande commandeNormalisee = new Commande();
-        for (Produit p : lignesCumulees.keySet()) {
-            commandeNormalisee.ajouter(p, lignesCumulees.get(p));
-        }
+        regrouper(lignes).forEach((produit, integers) -> commandeNormalisee.ajouter(
+                produit, integers.stream().reduce(0,Integer::sum)));
         return commandeNormalisee;
     }
 
