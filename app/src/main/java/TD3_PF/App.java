@@ -234,6 +234,16 @@ public class App {
     public static final Function<List<Paire<Double, Integer>>, Paire<Double, Integer>> reduit =
             as -> as.stream().reduce(zero,accumulateurMoyenne);
 
+    // calcule la moyenne à partir d'un couple (somme pondérée, somme coefs)
+    public static final Function<Paire<Double, Integer>, Double> divise =
+            p -> p.fst()/p.snd();
+
+    // calcul de moyenne fonctionnel
+    // composer notesPonderees, reduit et divise
+    // exception en cas de matière DEF
+    public static final Function<Etudiant, Double> computeMoyenne =
+            notesPonderees.andThen(reduit).andThen(divise);
+
     public static void main(final String[] args) {
         exercice2();
         exercice3();
