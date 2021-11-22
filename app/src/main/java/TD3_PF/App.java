@@ -20,7 +20,9 @@ import TD3_PF.universite.Matiere;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class App {
@@ -194,6 +196,30 @@ public class App {
     // transformation d'une Entry en une Paire
     public static final Function<Map.Entry<Matiere, Integer>, Paire<Matiere, Integer>> entry2paire =
             e -> new Paire<>(e.getKey(),e.getValue());
+
+
+    // matières coefficientées d'un étudiant (version Paire)
+    public static final Function<Etudiant, Stream<Paire<Matiere, Integer>>> matieresCoefE =
+            e -> matieresCoefE_.apply(e).map(entry2paire);
+
+    // accumulateur pour calcul de la moyenne
+    // ((asomme, acoefs), (note, coef)) -> (asomme+note*coef, acoef+coef)
+    public static final BinaryOperator<Paire<Double, Integer>> accumulateurMoyenne =
+            (acc,val) -> new Paire<>(acc.fst()+ val.fst()* val.snd(), acc.snd()+ val.snd() );
+
+    // zero (valeur initiale pour l'accumulateur)
+    public static final Paire<Double, Integer> zero =
+            new Paire<>(0.0,0);
+
+    // obtention de la liste de (note, coef) pour les matières d'un étudiant
+    // 1. obtenir les (matière, coef)s
+    // 2. mapper pour obtenir les (note, coef)s, null pour la note si l'étudiant est
+    // DEF dans cette matière
+    public static final Function<Etudiant, List<Paire<Double, Integer>>> notesPonderees =
+
+            e -> matieresCoefE.apply(e)
+                    .map(p -> new Paire<>(e.notes().get(p.fst()),p.snd()))
+                    .collect(Collectors.toList());
 
     public static void main(final String[] args) {
         exercice2();
